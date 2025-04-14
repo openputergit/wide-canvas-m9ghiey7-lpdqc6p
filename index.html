@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTrack - Your Daily Health Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+    }
+</style>
+<body class="bg-gradient-to-br from-cyan-500 to-blue-600 min-h-screen">
+    <nav class="p-4 glass-effect">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">HealthTrack</h1>
+            <div class="space-x-4">
+                <button id="profileBtn" class="text-white"><i class="bi bi-person-circle text-2xl"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Daily Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-lg p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">Steps</h3>
+                    <i class="bi bi-shoe-prints text-blue-500 text-xl"></i>
+                </div>
+                <p class="text-3xl font-bold mt-2" id="stepCount">0</p>
+                <p class="text-sm text-gray-500">Goal: 10,000</p>
+            </div>
+
+            <div class="bg-white rounded-lg p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">Water</h3>
+                    <i class="bi bi-droplet-fill text-blue-500 text-xl"></i>
+                </div>
+                <p class="text-3xl font-bold mt-2" id="waterCount">0</p>
+                <button onclick="addWater()" class="mt-2 bg-blue-500 text-white px-4 py-1 rounded">+ Glass</button>
+            </div>
+
+            <div class="bg-white rounded-lg p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">Sleep</h3>
+                    <i class="bi bi-moon-stars-fill text-blue-500 text-xl"></i>
+                </div>
+                <input type="number" id="sleepHours" class="border p-2 mt-2 w-full rounded" placeholder="Hours slept">
+                <button onclick="logSleep()" class="mt-2 bg-blue-500 text-white px-4 py-1 rounded">Log</button>
+            </div>
+
+            <div class="bg-white rounded-lg p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">Mood</h3>
+                    <i class="bi bi-emoji-smile text-blue-500 text-xl"></i>
+                </div>
+                <select id="moodSelect" class="border p-2 mt-2 w-full rounded">
+                    <option value="happy">😊 Happy</option>
+                    <option value="neutral">😐 Neutral</option>
+                    <option value="sad">😔 Sad</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="bg-white rounded-lg p-6 shadow-lg">
+            <h2 class="text-xl font-bold mb-4">Today's Activity Log</h2>
+            <div id="activityLog" class="space-y-2"></div>
+        </div>
+    </main>
+
+    <script>
+        let waterCount = 0;
+        let stepCount = 0;
+        const activityLog = document.getElementById('activityLog');
+
+        // Simulated step counter
+        setInterval(() => {
+            stepCount += Math.floor(Math.random() * 10);
+            document.getElementById('stepCount').textContent = stepCount;
+        }, 5000);
+
+        function addWater() {
+            waterCount++;
+            document.getElementById('waterCount').textContent = waterCount;
+            logActivity('Drank a glass of water');
+        }
+
+        function logSleep() {
+            const hours = document.getElementById('sleepHours').value;
+            if (hours) {
+                logActivity(`Slept for ${hours} hours`);
+                document.getElementById('sleepHours').value = '';
+            }
+        }
+
+        document.getElementById('moodSelect').addEventListener('change', (e) => {
+            logActivity(`Mood updated to: ${e.target.options[e.target.selectedIndex].text}`);
+        });
+
+        function logActivity(activity) {
+            const time = new Date().toLocaleTimeString();
+            const activityElement = document.createElement('div');
+            activityElement.className = 'p-2 bg-gray-50 rounded';
+            activityElement.innerHTML = `
+                <span class="text-gray-500">${time}</span>
+                <span class="ml-2">${activity}</span>
+            `;
+            activityLog.prepend(activityElement);
+        }
+
+        // Initialize with a welcome message
+        window.onload = () => {
+            logActivity('Welcome to HealthTrack! Start tracking your daily health.');
+        }
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
